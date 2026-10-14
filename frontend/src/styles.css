@@ -1,0 +1,293 @@
+:root {
+  --bg: #f5f7fa;
+  --card-border: #edf0f2;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--bg);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+    "Microsoft YaHei", sans-serif;
+}
+
+/* ── 布局 ── */
+
+.app-shell {
+  min-height: 100vh;
+}
+
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 0 24px;
+  border-bottom: 1px solid var(--card-border);
+  position: sticky;
+  top: 0;
+  z-index: 20;
+}
+
+/* 窄屏时标题不能换行 —— 换行会撑高 header 并压住导航。
+   优先压缩标题（flex-shrink），保证导航项始终完整可见。 */
+@media (max-width: 1100px) {
+  .app-header {
+    padding: 0 12px;
+    gap: 8px;
+  }
+  .app-logo {
+    font-size: 15px;
+  }
+}
+
+@media (max-width: 860px) {
+  .app-logo-text {
+    display: none; /* 只留火焰图标，把空间全让给导航 */
+  }
+}
+
+.app-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 17px;
+  font-weight: 600;
+  color: #111827;
+  flex-shrink: 1;
+  min-width: 0;
+  white-space: nowrap;
+}
+
+.app-logo-badge {
+  flex-shrink: 0; /* 图标绝不被压缩 */
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: #fff;
+  display: grid;
+  place-items: center;
+  font-size: 15px;
+}
+
+.app-body {
+  padding: 20px 24px 48px;
+  max-width: 1180px;
+  margin: 0 auto;
+}
+
+/* ── 通用卡片 ── */
+
+.stat-card .ant-statistic-title {
+  color: #6b7280;
+  font-size: 13px;
+}
+
+.metric-label {
+  color: #6b7280;
+  font-size: 12px;
+}
+
+.metric-value {
+  font-size: 20px;
+  font-weight: 600;
+  color: #111827;
+}
+
+.hint-text {
+  color: #8c8c8c;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+/* ── 对话页 ── */
+
+.chat-wrap {
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 140px);
+  min-height: 520px;
+}
+
+.chat-scroll {
+  flex: 1;
+  overflow-y: auto;
+  padding: 4px 4px 12px;
+}
+
+.chat-bubble {
+  max-width: 78%;
+  padding: 12px 14px;
+  border-radius: 12px;
+  line-height: 1.75;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.chat-bubble.user {
+  margin-left: auto;
+  background: #10b981;
+  color: #fff;
+}
+
+.chat-bubble.assistant {
+  background: #fff;
+  border: 1px solid var(--card-border);
+}
+
+.chat-input-bar {
+  border-top: 1px solid var(--card-border);
+  padding-top: 12px;
+  background: var(--bg);
+}
+
+.msg-toolbar {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+
+.cursor-blink::after {
+  content: "▍";
+  animation: blink 1s step-end infinite;
+  color: #10b981;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+/* ── 数据可信提示条 ── */
+
+.trust-bar {
+  margin-top: 8px;
+  font-size: 12px;
+  color: #92400e;
+  background: #fffbeb;
+  border: 1px solid #fde68a;
+  border-radius: 8px;
+  padding: 6px 10px;
+}
+
+.sql-box {
+  background: #0f172a;
+  color: #cbd5e1;
+  padding: 10px 12px;
+  border-radius: 8px;
+  font-family: "SFMono-Regular", Consolas, monospace;
+  font-size: 11px;
+  line-height: 1.6;
+  overflow-x: auto;
+  white-space: pre-wrap;
+}
+
+.record-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px dashed #f0f0f0;
+}
+
+.record-row:last-child {
+  border-bottom: none;
+}
+
+/* 页面纵向堆叠容器。
+   不用 <Space>：它默认横向排列，会把整页的 Row/Col 挤成一行。 */
+.page-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+}
+
+/* ECharts 容器不能塌陷：父级 flex/grid 下需要显式最小宽度，
+   否则 canvas 会被压成一条线。 */
+.ant-card-body > div:has(> div[style*="height"]) {
+  min-width: 0;
+}
+
+/* 顶部导航。
+   自己渲染而不用 antd Menu：横向 Menu 在窗口窄时会把尾部项收进「…」，
+   而 antd v6 已移除 overflowMode 控制它（CSS 硬改内部类名在真实浏览器里
+   不可靠 —— 无头看不到、有头会弄丢「个人中心」）。
+   导航是主入口，必须始终完整可见，所以不跟折叠逻辑较劲。 */
+.app-nav {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex: 0 0 auto; /* 不参与压缩 —— 宁可标题让位，导航也不让 */
+  white-space: nowrap;
+}
+
+.app-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 14px;
+  height: 64px;
+  font-size: 15px;
+  color: #374151;
+  text-decoration: none;
+  position: relative;
+  transition: color 0.2s;
+}
+
+.app-nav-item:hover {
+  color: #059669;
+}
+
+.app-nav-item-active {
+  color: #059669;
+  font-weight: 500;
+}
+
+/* 选中态的下划线 */
+.app-nav-item-active::after {
+  content: "";
+  position: absolute;
+  left: 14px;
+  right: 14px;
+  bottom: 0;
+  height: 2px;
+  background: #059669;
+  border-radius: 1px;
+}
+
+/* 窄屏时只缩间距，不折行、不隐藏任何一项 */
+@media (max-width: 1100px) {
+  .app-nav-item {
+    padding: 0 8px;
+    font-size: 14px;
+    gap: 4px;
+  }
+  .app-nav-item-active::after {
+    left: 8px;
+    right: 8px;
+  }
+}
+
+@media (max-width: 860px) {
+  .app-nav-item span {
+    display: none; /* 只留图标，但 4 项都还在 */
+  }
+  .app-nav-item {
+    padding: 0 10px;
+  }
+}

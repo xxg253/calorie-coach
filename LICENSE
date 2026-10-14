@@ -1,0 +1,42 @@
+MIT License
+
+Copyright (c) 2026 Calorie Coach Contributors
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+---
+
+数据来源说明
+============
+
+本项目使用以下公开数据集构建本地营养数据库：
+
+1. **食物成分数据**：USDA FoodData Central（美国农业部食品成分数据库）
+   - 许可：Public Domain（公有领域）
+   - https://fdc.nal.usda.gov/
+
+2. **中式食材与烹饪倍率**：手工整理，基于《中国食物成分表》的公开数值
+
+3. **运动代谢数据**：MET 值参考 Compendium of Physical Activities
+   - 许可：公开学术数据
+
+4. **菜谱数据**：项目内置，用于演示菜谱检索与追问流程
+
+使用这些数据构建的数据库文件（`data/*.db`）不随代码分发，
+请运行 `python -m app.cli init-db` 从种子数据重建。
